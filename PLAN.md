@@ -1,7 +1,8 @@
 # Yab Yum: After Hours — Delivery Plan
 
-**Status:** v0.1 draft, awaiting review
-**Date:** 2026-11-13
+**Status:** v1.0 approved
+**Approved:** 2026-11-16
+**Original draft:** 2026-11-13
 **Companion document:** `GDD.md` (rules, content, art and audio direction)
 
 This document covers how the game gets built: scope, technology, architecture, data formats, milestones, testing and risks.
@@ -337,7 +338,7 @@ Estimates are focused working days for one developer.
 
 | # | Milestone | Deliverable | Est. |
 |---|---|---|---|
-| 0 | Design lock | Reviewed `PLAN.md`/`GDD.md`, conga rule chosen from a paper prototype, pack and level schemas frozen at v0, asset list, zone themes | 2–3 d |
+| 0 | Design lock | Approved docs, conga rules recorded, paper prototype, asset list, pack and level schemas frozen at v0 | 2–3 d |
 | 1 | Vertical slice | One room, player + conga, one dancer, one bouncer, exit, timer, win/lose, HUD, 60 FPS scaling | 4–6 d |
 | 2 | Core systems | Tilemap/collision, keys/doors, crates, charisma + charm shot, lives, scoring, pause | 4–5 d |
 | 3 | AI and hazards | Three bouncer behaviours, rival, spotlight, line cutting, spawn safety | 3–4 d |
@@ -351,10 +352,12 @@ Estimates are focused working days for one developer.
 ### Acceptance criteria per milestone
 
 **M0 — Design lock**
-- `GDD.md` and `PLAN.md` approved.
-- The conga rule (solidity, persistence, failure behaviour) is decided and written down.
+- `GDD.md` and `PLAN.md` approved (done, v1.0).
+- Conga rules (solidity, persistence, cut penalty, exit behaviour) recorded in `docs/prototype-notes.md` (done for the prototype; playtests may revise).
+- `docs/asset-list.md` lists every logical asset ID with frame counts.
 - Pack schema and level schema have worked examples that the future validator can target.
-- A complete logical-asset list exists, derived from the GDD.
+- Zone themes are summarised in one paragraph each.
+- Milestone 1 scope is signed off.
 
 **M1 — Vertical slice**
 - One room playable start to finish with keyboard and gamepad.
@@ -443,19 +446,29 @@ This section records intent, not legal advice.
 
 ## 12. Open questions
 
-1. Final title: keep "Yab Yum: After Hours" or use a fully original name?
-2. Conga line: solid to enemies only (recommended), solid to everyone, or non-solid?
-3. Does the line persist between rooms, or reset at each door?
-4. On a hit, is the penalty one life, or only the tail of the line?
-5. Is the boss a dance-off, a chase, or a multi-phase room?
-6. Art pipeline: hand-authored, generated with manual cleanup, or commissioned?
-7. Minimum hardware target, which sets the performance budget.
-8. Should assist mode disable line cutting entirely, or only slow enemies?
+### Resolved for the prototype
+
+1. Conga solidity — solid to enemies and projectiles, passable by the player.
+2. Line persistence — resets at each room exit; the line is not carried between rooms.
+3. Cut penalty — contact removes the hit dancer and everyone behind; no life is lost. Only the timer costs a life.
+4. Exit behaviour — unlocks immediately when the objective is met; a fixed door the player must reach.
+
+Rationale, confidence and revisit triggers are in `docs/prototype-notes.md`.
+
+### Open
+
+5. Final title: keep "Yab Yum: After Hours" or use a fully original name?
+6. Boss design: dance-off, chase, or multi-phase room?
+7. Art pipeline: hand-authored, generated with manual cleanup, or commissioned?
+8. Minimum hardware target, which sets the final performance budget.
+9. Assist mode: disable line cutting entirely, or only slow enemies?
 
 ---
 
 ## 13. Immediate next actions
 
-1. Review `PLAN.md` and `GDD.md`; mark anything to change.
-2. Resolve the open questions in section 12, especially conga solidity and failure rules.
-3. On approval, start Milestone 0: conga paper prototype, schema examples, and the logical-asset list.
+1. ~~Review and approve `PLAN.md` and `GDD.md`.~~ Done, v1.0 (2026-11-16).
+2. ~~Resolve conga solidity, persistence and failure rules.~~ Done; see `docs/prototype-notes.md`.
+3. Build the ASCII paper prototype of the conga rules and record the result in `docs/prototype-notes.md`.
+4. Produce `docs/asset-list.md`, the v0 pack example and two example level files.
+5. Sign off Milestone 1 scope, then scaffold the repository per §5.

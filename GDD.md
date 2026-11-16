@@ -1,7 +1,8 @@
 # Yab Yum: After Hours — Game Design Document
 
-**Status:** v0.1 draft, awaiting review
-**Date:** 2026-11-13
+**Status:** v1.0 approved
+**Approved:** 2026-11-16
+**Original draft:** 2026-11-13
 **Companion document:** `PLAN.md` (technology, milestones, risks)
 
 ---
@@ -93,9 +94,10 @@ Outer loop: zone intro → four rooms → bonus room → zone clear → next zon
 - Each collected dancer occupies the tile the player occupied **N** steps ago, where N is the dancer's position in the line (1 = immediately behind).
 - The line follows the exact path history; it does not pathfind and does not cut corners.
 - Path history is capped by the maximum line length (8 dancers).
-- **Solidity (provisional, to be prototyped):** the line is solid to enemies and projectiles, but not to the player. This prevents the player from trapping themselves while preserving the line as a shield and a liability.
+- **Solidity (prototype decision, see `docs/prototype-notes.md`):** the line is solid to enemies and projectiles, but not to the player. This prevents the player from trapping themselves while preserving the line as a shield and a liability.
 - The line can pass through doors and over spills; it cannot pass through walls or crates, because it only ever occupies tiles the player has already traversed.
-- If the line is cut, the affected dancers scatter and respawn at their original positions after 2 seconds, with a visible "returning" state.
+- The line is handed over at the room exit and starts empty in the next room. Rooms are self-contained; the line is not carried between them.
+- If the line is cut, the hit dancer and everyone behind them scatter and respawn at their original positions after 2 seconds, with a visible "returning" state. No life is lost.
 
 ### 7.3 Dancers and collection
 
@@ -136,7 +138,7 @@ Every room has an explicit objective shown on entry:
 - `survive` — stay alive for the timer duration; dancers are bonus score.
 - `bonus` — no hazards; a short timing challenge.
 
-The exit is inert until the objective is met. Its state is telegraphed by colour and animation.
+The exit is inert until the objective is met. Its state is telegraphed by colour and animation. Unlocking is immediate; the remaining task is to walk the line to the fixed exit. There is no second objective or scripted escort back to the spawn point.
 
 ### 7.7 Timer, lives and failure
 
@@ -249,17 +251,17 @@ Sprite budget (default pack): player 24 frames, dancers 6 variants × 10 frames,
 
 ## 13. Prototype questions
 
-These must be answered in Milestone 0 before production art or level content begins:
+The conga rules that block implementation are locked in `docs/prototype-notes.md`. The remaining questions are tuning, not blockers, and are answered through playtests during M1–M4:
 
-1. **Line solidity:** solid to enemies only, solid to everyone, or non-solid?
-2. **Line persistence:** reset at each door, or carry between rooms?
-3. **Cut penalty:** lose the whole tail (current proposal), lose one dancer, or lose the last N?
-4. **Collection order:** does collecting the last dancer immediately open the exit, or is there a return trip?
-5. **Room length:** is 90 seconds the right default, or does 60 feel tighter?
-6. **Charm economy:** are three pips and a 0.5 s cooldown enough to feel tactical rather than spammy?
-7. **Boss:** dance-off pattern-matching vs pursuit vs multi-room chase.
+1. **Room length:** is 90 seconds the right default, or does 60 feel tighter?
+2. **Charm economy:** are three pips and a 0.5 s cooldown enough to feel tactical rather than spammy?
+3. **Boss:** dance-off pattern-matching vs pursuit vs multi-room chase.
+4. **Line length cap:** is 8 the right maximum, or does 6 read better on screen?
+5. **Difficulty split:** which parameters belong to difficulty levels versus assist mode?
 
-Each question gets a one-page playtest note with a recommendation, recorded in `docs/prototype-notes.md` once production starts.
+Collection order is decided: the exit opens immediately when the objective is met and is a fixed door the player must reach.
+
+Each answer gets a short note with a recommendation, recorded in `docs/prototype-notes.md` or the relevant milestone's playtest log.
 
 ---
 
